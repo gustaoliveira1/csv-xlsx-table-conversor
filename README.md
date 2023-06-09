@@ -18,12 +18,14 @@ pip install pandas openpyxl
 
 ## Usage
 
-1. Place files in the **data** directory
+1. Create and place files in the **data** directory
 
 - If there are CSV files directly inside the "data" directory, each file will be converted into a separate workbook file.
 - If there is a folder inside the "data" directory containing CSV files, the folder itself will be converted into a workbook file, and each CSV file inside it will become a separate worksheet within that workbook.
 
-2. Run the main file
+2. Create **out** dir
+
+3. Run the main file
 
 ```bash
 python main.py
