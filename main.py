@@ -10,20 +10,10 @@ def main():
         wb = openpyxl.Workbook()
 
         if isinstance(workbook_path, str):
-            worksheet = wb.active
             dataframe = pd.read_csv(workbook_path)
-            head = dataframe.head(0).columns.to_list()
+            worksheet = wb.active
 
-            worksheet.append(list(map(str.capitalize, head)))
-
-            for _, row in dataframe.iterrows():
-                new_row = []
-                for column in head:
-                    new_row.append(row[column])
-
-                worksheet.append(new_row)
-
-            formatTableCells(worksheet)
+            populateWorksheet(dataframe, worksheet)
 
             filename = extractFilenameFromUrl(workbook_path)
 
@@ -32,24 +22,27 @@ def main():
                 dataframe = pd.read_csv(worksheet_path)
                 worksheet = wb.create_sheet("Nova Planilha")
 
-                head = dataframe.head(0).columns.to_list()
-
-                worksheet.append(list(map(str.capitalize, head)))
-
-                for _, row in dataframe.iterrows():
-                    new_row = []
-                    for column in head:
-                        new_row.append(row[column])
-
-                    worksheet.append(new_row)
-
-                formatTableCells(worksheet)
+                populateWorksheet(dataframe, worksheet)
 
             filename = extractFilenameFromUrl(workbook_path[0])
+
+            # delete a worksheet that is initialized as a workbook
             sheet = wb.active
             wb.remove(sheet)
 
         wb.save(f"out/{filename}.xlsx")
+
+
+def populateWorksheet(dataframe, worksheet):
+    head = dataframe.head(0).columns.to_list()
+
+    worksheet.append(list(map(str.capitalize, head)))
+
+    for _, row in dataframe.iterrows():
+        new_row = [row[column] for column in head]
+        worksheet.append(new_row)
+
+    formatTableCells(worksheet)
 
 
 def listFilesPath():
